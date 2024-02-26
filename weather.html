@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/8d36388f86.js" crossorigin="anonymous"></script>
+    <title>Weather App - Creatorboy and Aty Code</title>
+  </head>
+  <body>
+    <header>
+      <a href="main.html"><i class="fa-solid fa-house"></i></a>
+    </header>
+    <main>
+      <h1>Weather App</h1>
+      <label for="city-select">Choose a city:</label>
+      <select name="cities" id="city-select">
+        <option value="">--Please choose an option--</option>
+        <option value="Edinburgh">Edinburgh</option>
+        <option value="Glasgow">Glasgow</option>
+        <option value="London">London</option>
+        <option value="Madrid">Madrid</option>
+        <option value="Paris">Paris</option>
+        <option value="Stockholm">Stockholm</option>
+      </select>
+      <button type="button" name="get-weather" onclick=getWeather()>Get Weather</button>
+      <hr>
+      <div id="location-info"></div>
+      <div id="weather-grid"></div>
+    </main>
+    <footer>Developed by Creatorboy and Aty, 2024</footer>
+  </body>
+  <script type="text/javascript">
+    const placeSelect = document.getElementById("city-select");
+    const locationContainer = document.getElementById("location-info")
+    const weatherContainer = document.getElementById("weather-grid");
+
+    async function getWeather() {
+      const place = placeSelect.value;
+      const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?q=${place}&days=3&key=a4b6b72d32724724af6132734242502`);
+      const weather = await response.json();
+
+      console.log(weather)
+
+      locationContainer.innerHTML = `<h2>${weather.location.name}</h2><h3>${weather.location.country}</h3>`
+
+      weatherContainer.innerHTML = ''
+      weather.forecast.forecastday.forEach(day => {
+        const date = new Date(day.date).toDateString().split(' ');
+
+        weatherContainer.innerHTML += `
+          <div class='weather'>
+            <h3>${date[0]} ${date[2]}</h3>
+            <img src='https:${day.day.condition.icon}' alt='${day.day.condition.text}' />
+            <p class='temp'>${day.day.avgtemp_c}°C</p>
+          </div>
+        `
+      })
+    }
+  </script>
+</html>

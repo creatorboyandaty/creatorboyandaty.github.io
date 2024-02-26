@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/8d36388f86.js" crossorigin="anonymous"></script>
+    <title>Riddles App - Creatorboy and Aty Code</title>
+  </head>
+  <body>
+    <header>
+      <a href="main.html"><i class="fa-solid fa-house"></i></a>
+    </header>
+    <main>
+      <h1>Riddle Me This</h1>
+      <button type="button" name="button" onclick=getRiddle()>Click for a new riddle</button>
+      <hr>
+      <div id="riddle"></div>
+      <button id="answerButton" type="button" name="button" onclick=toggleAnswerDisplay()>Show Answer</button>
+      <div id="answer"></div>
+    </main>
+    <footer>Developed by Creatorboy and Aty, 2024</footer>
+  </body>
+  <script type="text/javascript">
+    let answerHidden = true;
+    const riddleDisplay = document.getElementById('riddle');
+    const answerDisplay = document.getElementById('answer');
+    const answerButton = document.getElementById('answerButton');
+
+    async function getRiddle() {
+      const response = await fetch("https://riddles-api.vercel.app/random");
+      const riddle = await response.json();
+
+      hideAnswer();
+      riddleDisplay.innerHTML = `<p>${riddle.riddle}</p>`;
+      answerDisplay.innerHTML = `<p>${riddle.answer}</p>`;
+    }
+
+    function hideAnswer() {
+      answerHidden = true
+      answerDisplay.style.display = 'none'
+      answerButton.innerText = 'Show Answer'
+    }
+    function showAnswer() {
+      answerHidden = false
+      answerDisplay.style.display = 'block'
+      answerButton.innerText = 'Hide Answer'
+    }
+    function toggleAnswerDisplay() {
+      answerHidden ? showAnswer() : hideAnswer();
+    }
+  </script>
+</html>
